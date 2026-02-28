@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WorkoutSetupChoiceStep: View {
     @ObservedObject var viewModel: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var isAISelected: Bool {
         viewModel.profile.workoutSetupChoice == .ai
@@ -15,7 +16,7 @@ struct WorkoutSetupChoiceStep: View {
         OnboardingStepWrapper(
             title: "SEU\nPLANO",
             subtitle: "Você pode mudar isso depois, sem stress.",
-            stepTag: "Passo 7 de 7"
+            stepTag: "Passo 8 de 8"
         ) {
             VStack(spacing: AppTheme.Spacing.sm) {
                 // Card IA com badge
@@ -25,9 +26,10 @@ struct WorkoutSetupChoiceStep: View {
                 } label: {
                     HStack(spacing: AppTheme.Spacing.md) {
                         Image(systemName: "sparkles")
-                            .font(.system(size: 18, weight: .light))
+                            .font(.system(.body, weight: .light))
                             .foregroundColor(isAISelected ? AppTheme.Colors.accent : AppTheme.Colors.tertiaryLabel)
                             .frame(width: 28)
+                            .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 4) {
                             HStack(spacing: AppTheme.Spacing.sm) {
@@ -36,7 +38,7 @@ struct WorkoutSetupChoiceStep: View {
                                     .foregroundColor(AppTheme.Colors.label)
 
                                 Text("RECOMENDADO")
-                                    .font(.system(size: 9, weight: .semibold))
+                                    .font(AppTheme.Typography.smallLabel)
                                     .kerning(AppTheme.Kerning.overline)
                                     .foregroundColor(AppTheme.Colors.accent)
                                     .padding(.horizontal, 8)
@@ -53,6 +55,7 @@ struct WorkoutSetupChoiceStep: View {
                         Spacer()
                     }
                     .padding(AppTheme.Spacing.md)
+                    .frame(minHeight: 44)
                     .background(AppTheme.Colors.secondaryBackground)
                     .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
                     .overlay(
@@ -61,6 +64,8 @@ struct WorkoutSetupChoiceStep: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Montar para mim. Recomendado. Ficha personalizada com base no seu perfil")
+                .accessibilityAddTraits(isAISelected ? [.isSelected] : [])
 
                 // Card Manual
                 SelectionCard(
@@ -73,7 +78,7 @@ struct WorkoutSetupChoiceStep: View {
                 }
             }
         }
-        .animation(AppTheme.Animation.quick, value: viewModel.profile.workoutSetupChoice)
+        .animation(AppTheme.Animation.quick(reduceMotion: reduceMotion), value: viewModel.profile.workoutSetupChoice)
     }
 }
 

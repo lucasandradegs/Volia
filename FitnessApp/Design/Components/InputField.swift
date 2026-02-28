@@ -9,6 +9,7 @@ struct InputField: View {
 
     @State private var isPasswordVisible = false
     @FocusState private var isFocused: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
@@ -36,8 +37,11 @@ struct InputField: View {
                     } label: {
                         Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                             .foregroundColor(AppTheme.Colors.tertiaryLabel)
-                            .font(.system(size: 14))
+                            .font(.system(.subheadline))
+                            .frame(minWidth: 44, minHeight: 44)
+                            .contentShape(Rectangle())
                     }
+                    .accessibilityLabel(isPasswordVisible ? "Ocultar senha" : "Mostrar senha")
                 }
             }
             .padding(.horizontal, AppTheme.Spacing.md)
@@ -48,17 +52,18 @@ struct InputField: View {
                 RoundedRectangle(cornerRadius: AppTheme.Radius.sharp)
                     .stroke(isFocused ? AppTheme.Colors.label : AppTheme.Colors.border, lineWidth: 1)
             )
-            .animation(AppTheme.Animation.quick, value: isFocused)
+            .animation(AppTheme.Animation.quick(reduceMotion: reduceMotion), value: isFocused)
         }
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
+        .accessibilityLabel(label)
     }
 }
 
 #Preview {
     VStack(spacing: AppTheme.Spacing.lg) {
-        InputField(label: "Email", placeholder: "your@email.com", text: .constant(""), keyboardType: .emailAddress)
-        InputField(label: "Password", placeholder: "Your password", text: .constant(""), isSecure: true)
+        InputField(label: "Email", placeholder: "seu@email.com", text: .constant(""), keyboardType: .emailAddress)
+        InputField(label: "Senha", placeholder: "Sua senha", text: .constant(""), isSecure: true)
     }
     .padding(AppTheme.Spacing.lg)
     .background(AppTheme.Colors.background)

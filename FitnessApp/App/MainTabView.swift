@@ -21,8 +21,7 @@ struct MainTabView: View {
             }
 
             Tab("Perfil", systemImage: "person.fill", value: 3) {
-                Text("Tela Perfil")
-                    .font(.title2)
+                ProfileView()
             }
         }
     }

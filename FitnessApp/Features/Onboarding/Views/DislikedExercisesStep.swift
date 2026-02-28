@@ -12,7 +12,7 @@ struct DislikedExercisesStep: View {
         OnboardingStepWrapper(
             title: "SEUS\nDISLIKES",
             subtitle: "A gente entende. Vamos adaptar seu plano.",
-            stepTag: "Passo 4 de 7"
+            stepTag: "Passo 5 de 8"
         ) {
             VStack(spacing: AppTheme.Spacing.lg) {
                 LazyVGrid(columns: columns, spacing: AppTheme.Spacing.sm) {
@@ -32,6 +32,7 @@ struct DislikedExercisesStep: View {
                     .foregroundColor(AppTheme.Colors.disabled)
             }
         }
+        .id("disliked")
     }
 
     private func toggleDisliked(_ muscle: MuscleGroup) {

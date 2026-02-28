@@ -5,6 +5,8 @@ struct PrimaryButton: View {
     let isLoading: Bool
     let action: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     init(_ title: String, isLoading: Bool = false, action: @escaping () -> Void) {
         self.title = title
         self.isLoading = isLoading
@@ -30,14 +32,15 @@ struct PrimaryButton: View {
         }
         .disabled(isLoading)
         .opacity(isLoading ? 0.6 : 1.0)
-        .animation(AppTheme.Animation.quick, value: isLoading)
+        .accessibilityLabel(title)
+        .animation(AppTheme.Animation.quick(reduceMotion: reduceMotion), value: isLoading)
     }
 }
 
 #Preview {
     VStack(spacing: AppTheme.Spacing.lg) {
-        PrimaryButton("Build my plan") {}
-        PrimaryButton("Loading...", isLoading: true) {}
+        PrimaryButton("Montar meu plano") {}
+        PrimaryButton("Carregando...", isLoading: true) {}
     }
     .padding(AppTheme.Spacing.lg)
     .background(AppTheme.Colors.background)

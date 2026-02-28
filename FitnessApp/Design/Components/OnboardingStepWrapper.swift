@@ -11,7 +11,7 @@ struct OnboardingStepWrapper<Content: View>: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
                 if let stepTag {
                     Text(stepTag.uppercased())
-                        .font(AppTheme.Typography.overline)
+                        .font(AppTheme.Typography.smallLabel)
                         .tracking(AppTheme.Kerning.tag)
                         .foregroundColor(AppTheme.Colors.tertiaryLabel)
                         .padding(.horizontal, 12)
@@ -20,6 +20,7 @@ struct OnboardingStepWrapper<Content: View>: View {
                             Capsule()
                                 .stroke(AppTheme.Colors.disabled, lineWidth: 1)
                         )
+                        .accessibilityHidden(true)
                 }
 
                 Text(title)
@@ -48,7 +49,7 @@ struct OnboardingStepWrapper<Content: View>: View {
     OnboardingStepWrapper(
         title: "SEU\nOBJETIVO",
         subtitle: "Escolha o que mais importa pra você agora",
-        stepTag: "Passo 1 de 7"
+        stepTag: "Passo 1 de 8"
     ) {
         SelectionCard(title: "Ganhar massa", icon: "figure.strengthtraining.traditional", isSelected: true) {}
         SelectionCard(title: "Perder peso", icon: "flame.fill", isSelected: false) {}

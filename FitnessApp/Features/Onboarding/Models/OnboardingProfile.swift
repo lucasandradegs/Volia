@@ -5,6 +5,9 @@ import Foundation
 struct OnboardingProfile: Codable {
     var goal: WorkoutGoal?
     var experienceLevel: ExperienceLevel?
+    var age: Int = 25
+    var weight: Int = 70
+    var height: Int = 175
     var availableDays: Int = 3
     var sessionDuration: Int = 45
     var dislikedMuscleGroups: [MuscleGroup] = []

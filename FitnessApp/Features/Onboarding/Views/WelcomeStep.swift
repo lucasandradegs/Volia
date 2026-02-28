@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WelcomeStep: View {
     @State private var appeared = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: AppTheme.Spacing.lg) {
@@ -11,7 +12,8 @@ struct WelcomeStep: View {
                 .font(.system(size: 40, weight: .thin))
                 .foregroundColor(AppTheme.Colors.tertiaryLabel)
                 .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 12)
+                .offset(y: reduceMotion ? 0 : (appeared ? 0 : 12))
+                .accessibilityHidden(true)
 
             VStack(spacing: AppTheme.Spacing.md) {
                 Text("SEU\nTREINO")
@@ -20,7 +22,7 @@ struct WelcomeStep: View {
                     .foregroundColor(AppTheme.Colors.label)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 16)
+                    .offset(y: reduceMotion ? 0 : (appeared ? 0 : 16))
 
                 Text("DO SEU JEITO")
                     .font(AppTheme.Typography.display)
@@ -28,7 +30,7 @@ struct WelcomeStep: View {
                     .foregroundColor(AppTheme.Colors.tertiaryLabel)
                     .multilineTextAlignment(.center)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 16)
+                    .offset(y: reduceMotion ? 0 : (appeared ? 0 : 16))
 
                 Text("Vamos criar um plano que respeita suas\npreferências, limitações e objetivos.")
                     .font(AppTheme.Typography.body)
@@ -37,7 +39,7 @@ struct WelcomeStep: View {
                     .lineSpacing(4)
                     .padding(.top, AppTheme.Spacing.sm)
                     .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 20)
+                    .offset(y: reduceMotion ? 0 : (appeared ? 0 : 20))
             }
 
             Spacer()
@@ -45,8 +47,12 @@ struct WelcomeStep: View {
         }
         .padding(.horizontal, AppTheme.Spacing.lg)
         .onAppear {
-            withAnimation(.easeOut(duration: 0.6).delay(0.1)) {
+            if reduceMotion {
                 appeared = true
+            } else {
+                withAnimation(.easeOut(duration: 0.6).delay(0.1)) {
+                    appeared = true
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ struct SensitiveAreasStep: View {
         OnboardingStepWrapper(
             title: "ÁREAS\nSENSÍVEIS",
             subtitle: "Queremos que você treine seguro. Vamos pegar leve onde precisar.",
-            stepTag: "Passo 5 de 7"
+            stepTag: "Passo 6 de 8"
         ) {
             VStack(spacing: AppTheme.Spacing.lg) {
                 LazyVGrid(columns: columns, spacing: AppTheme.Spacing.sm) {
@@ -32,6 +32,7 @@ struct SensitiveAreasStep: View {
                     .foregroundColor(AppTheme.Colors.disabled)
             }
         }
+        .id("sensitive")
     }
 
     private func toggleSensitive(_ area: MuscleGroup) {

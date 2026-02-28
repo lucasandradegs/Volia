@@ -7,7 +7,7 @@ struct ExperienceLevelStep: View {
         OnboardingStepWrapper(
             title: "SEU\nNÍVEL",
             subtitle: "Seja honesto — isso nos ajuda a montar o plano certo pra você",
-            stepTag: "Passo 2 de 7"
+            stepTag: "Passo 2 de 8"
         ) {
             VStack(spacing: AppTheme.Spacing.sm) {
                 ForEach(ExperienceLevel.allCases) { level in

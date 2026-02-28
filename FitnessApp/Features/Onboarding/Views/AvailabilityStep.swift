@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AvailabilityStep: View {
     @ObservedObject var viewModel: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let durations: [(value: Int, label: String, desc: String)] = [
         (30, "30", "Focado"),
@@ -39,14 +40,13 @@ struct AvailabilityStep: View {
         OnboardingStepWrapper(
             title: "SUA\nROTINA",
             subtitle: "Vamos montar seu plano em torno da sua vida real — não o contrário.",
-            stepTag: "Passo 6 de 7"
+            stepTag: "Passo 7 de 8"
         ) {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
 
                 // MARK: - Dias por semana
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
 
-                    // Header row
                     HStack(alignment: .bottom) {
                         Text("DIAS POR SEMANA")
                             .font(AppTheme.Typography.overline)
@@ -61,16 +61,18 @@ struct AvailabilityStep: View {
                                     .font(AppTheme.Typography.displaySmall)
                                     .foregroundColor(AppTheme.Colors.label)
                                 Text("/ 7")
-                                    .font(.system(size: 11))
+                                    .font(AppTheme.Typography.smallLabel)
                                     .foregroundColor(AppTheme.Colors.tertiaryLabel)
                                     .kerning(1)
                             }
                             Text("\(commitmentLabel) · \(commitmentSub)")
-                                .font(.system(size: 10))
+                                .font(AppTheme.Typography.smallLabel)
                                 .foregroundColor(AppTheme.Colors.secondaryLabel)
                                 .kerning(0.8)
                         }
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(viewModel.profile.availableDays) de 7 dias por semana. \(commitmentLabel), \(commitmentSub)")
 
                     // Bar chart
                     HStack(alignment: .bottom, spacing: 4) {
@@ -82,28 +84,33 @@ struct AvailabilityStep: View {
                                           : AppTheme.Colors.secondaryBackground)
                                     .frame(maxWidth: .infinity)
                                     .frame(height: barHeights[i])
-                                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: viewModel.profile.availableDays)
-                                    .onTapGesture {
-                                        HapticManager.selection()
-                                        withAnimation(.spring(response: 0.3)) {
-                                            viewModel.profile.availableDays = i + 1
-                                        }
-                                    }
+                                    .animation(reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7), value: viewModel.profile.availableDays)
 
                                 Text(dayLabels[i])
-                                    .font(.system(size: 9, weight: .medium))
+                                    .font(AppTheme.Typography.smallLabel)
                                     .kerning(0.8)
                                     .foregroundColor(i < viewModel.profile.availableDays
                                                      ? AppTheme.Colors.label
                                                      : AppTheme.Colors.tertiaryLabel)
-                                    .animation(.easeOut(duration: 0.2), value: viewModel.profile.availableDays)
+                                    .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: viewModel.profile.availableDays)
                             }
+                            .contentShape(Rectangle())
+                            .frame(minHeight: 44)
+                            .onTapGesture {
+                                HapticManager.selection()
+                                withAnimation(reduceMotion ? nil : .spring(response: 0.3)) {
+                                    viewModel.profile.availableDays = i + 1
+                                }
+                            }
+                            .accessibilityLabel("\(dayLabels[i]), \(i < viewModel.profile.availableDays ? "selecionado" : "não selecionado")")
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
+                    .accessibilityElement(children: .contain)
 
                     // Slider
-                    DaysSlider(value: $viewModel.profile.availableDays)
-                        .frame(height: 20)
+                    DaysSlider(value: $viewModel.profile.availableDays, reduceMotion: reduceMotion)
+                        .frame(height: 44)
                         .padding(.top, 4)
                 }
 
@@ -118,17 +125,20 @@ struct AvailabilityStep: View {
                         ForEach(durations, id: \.value) { d in
                             Button {
                                 HapticManager.selection()
-                                withAnimation(.easeOut(duration: 0.2)) {
+                                withAnimation(AppTheme.Animation.quick(reduceMotion: reduceMotion)) {
                                     viewModel.profile.sessionDuration = d.value
                                 }
                             } label: {
                                 DurationCard(
                                     label: d.label,
                                     desc: d.desc,
-                                    isSelected: viewModel.profile.sessionDuration == d.value
+                                    isSelected: viewModel.profile.sessionDuration == d.value,
+                                    reduceMotion: reduceMotion
                                 )
                             }
                             .buttonStyle(.plain)
+                            .accessibilityLabel("\(d.label) minutos, \(d.desc)")
+                            .accessibilityAddTraits(viewModel.profile.sessionDuration == d.value ? [.isSelected] : [])
                         }
                     }
                 }
@@ -138,11 +148,11 @@ struct AvailabilityStep: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("SEU VOLUME SEMANAL")
-                                .font(.system(size: 10, weight: .medium))
+                                .font(AppTheme.Typography.smallLabel)
                                 .foregroundColor(AppTheme.Colors.secondaryLabel)
                                 .kerning(1)
                             Text("\(viewModel.profile.availableDays) sessões · \(viewModel.profile.sessionDuration) min cada")
-                                .font(.system(size: 14, weight: .medium))
+                                .font(AppTheme.Typography.headline)
                                 .foregroundColor(AppTheme.Colors.label)
                         }
                         Spacer()
@@ -151,7 +161,7 @@ struct AvailabilityStep: View {
                                 .font(AppTheme.Typography.displaySmall)
                                 .foregroundColor(AppTheme.Colors.label)
                             Text("min/sem")
-                                .font(.system(size: 10))
+                                .font(AppTheme.Typography.smallLabel)
                                 .foregroundColor(AppTheme.Colors.secondaryLabel)
                         }
                     }
@@ -162,10 +172,12 @@ struct AvailabilityStep: View {
                             .stroke(AppTheme.Colors.border, lineWidth: 1)
                     )
                     .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
-                    .transition(.asymmetric(
+                    .transition(reduceMotion ? .opacity : .asymmetric(
                         insertion: .move(edge: .bottom).combined(with: .opacity),
                         removal: .opacity
                     ))
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Volume semanal: \(totalMinutes) minutos por semana. \(viewModel.profile.availableDays) sessões de \(viewModel.profile.sessionDuration) minutos")
                 }
             }
         }
@@ -177,6 +189,7 @@ private struct DurationCard: View {
     let label: String
     let desc: String
     let isSelected: Bool
+    let reduceMotion: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -187,12 +200,12 @@ private struct DurationCard: View {
                 .minimumScaleFactor(0.7)
 
             Text("min")
-                .font(.system(size: 9, weight: .medium))
+                .font(AppTheme.Typography.smallLabel)
                 .foregroundColor(isSelected ? AppTheme.Colors.accent : AppTheme.Colors.tertiaryLabel)
                 .kerning(1)
 
             Text(desc)
-                .font(.system(size: 10))
+                .font(AppTheme.Typography.smallLabel)
                 .foregroundColor(AppTheme.Colors.secondaryLabel)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -203,13 +216,14 @@ private struct DurationCard: View {
                 .stroke(isSelected ? AppTheme.Colors.accent : AppTheme.Colors.border, lineWidth: isSelected ? 1.5 : 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
-        .animation(.easeOut(duration: 0.2), value: isSelected)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: isSelected)
     }
 }
 
 // MARK: - Custom Slider
 private struct DaysSlider: View {
     @Binding var value: Int
+    let reduceMotion: Bool
     private let range = 1...7
 
     var body: some View {
@@ -232,12 +246,16 @@ private struct DaysSlider: View {
                     .frame(width: max(0, thumbX - 8), height: 2)
                     .cornerRadius(1)
 
-                // Thumb
+                // Thumb — visual 16pt mas área de toque 44pt
                 Circle()
                     .fill(AppTheme.Colors.accent)
                     .frame(width: 16, height: 16)
-                    .offset(x: thumbX - 8)
+                    .padding(14) // expande touch target para 44pt
+                    .contentShape(Circle().scale(2.75))
+                    .offset(x: thumbX - 22)
             }
+            .frame(maxHeight: .infinity)
+            .contentShape(Rectangle())
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { gesture in
@@ -245,13 +263,26 @@ private struct DaysSlider: View {
                         let clamped = max(0, min(1, raw))
                         let newValue = range.lowerBound + Int(round(clamped * CGFloat(steps)))
                         if newValue != value {
-                            withAnimation(.interactiveSpring()) {
+                            withAnimation(reduceMotion ? nil : .interactiveSpring()) {
                                 value = newValue
                             }
                             HapticManager.selection()
                         }
                     }
             )
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Dias por semana")
+        .accessibilityValue("\(value) dias")
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                if value < 7 { value += 1; HapticManager.selection() }
+            case .decrement:
+                if value > 1 { value -= 1; HapticManager.selection() }
+            @unknown default:
+                break
+            }
         }
     }
 }

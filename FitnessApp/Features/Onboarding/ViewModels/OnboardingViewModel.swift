@@ -8,8 +8,9 @@ final class OnboardingViewModel: ObservableObject {
 
     @Published var currentStep: Int = 0
     @Published var profile = OnboardingProfile()
+    @Published var bodyDataShowsContinue: Bool = false
 
-    let totalSteps = 8
+    let totalSteps = 9
 
     // MARK: - Navigation
 
@@ -29,6 +30,10 @@ final class OnboardingViewModel: ObservableObject {
         isLastStep ? "Começar" : "Continuar"
     }
 
+    var shouldHideBottomButton: Bool {
+        currentStep == 3 && !bodyDataShowsContinue
+    }
+
     var canAdvance: Bool {
         canAdvanceFrom(step: currentStep)
     }
@@ -42,14 +47,16 @@ final class OnboardingViewModel: ObservableObject {
         case 2:
             return profile.experienceLevel != nil
         case 3:
-            return profile.equipmentAvailable != nil
+            return true // Body data tem valores padrão
         case 4:
-            return true // Disliked muscles é opcional
+            return profile.equipmentAvailable != nil
         case 5:
-            return true // Sensitive areas é opcional
+            return true // Disliked muscles é opcional
         case 6:
-            return true // Availability tem valores padrão
+            return true // Sensitive areas é opcional
         case 7:
+            return true // Availability tem valores padrão
+        case 8:
             return profile.workoutSetupChoice != nil
         default:
             return false
@@ -69,6 +76,7 @@ final class OnboardingViewModel: ObservableObject {
     // MARK: - Completion
 
     func completeOnboarding() {
-        // Será implementado na Etapa 4 (persistência)
+        UserPreferencesManager.shared.saveOnboardingProfile(profile)
+        UserPreferencesManager.shared.setAppState(.awaitingAccount)
     }
 }

@@ -6,6 +6,8 @@ struct CompactSelectionCard: View {
     let isSelected: Bool
     let action: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         Button {
             HapticManager.selection()
@@ -13,16 +15,18 @@ struct CompactSelectionCard: View {
         } label: {
             VStack(spacing: AppTheme.Spacing.sm) {
                 Image(systemName: icon)
-                    .font(.system(size: 18))
+                    .font(.system(.body))
                     .foregroundColor(isSelected ? AppTheme.Colors.accent : AppTheme.Colors.tertiaryLabel)
                     .frame(height: 22)
+                    .accessibilityHidden(true)
 
                 Text(title)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(AppTheme.Typography.smallLabel)
                     .tracking(0.5)
                     .foregroundColor(AppTheme.Colors.label)
             }
             .frame(maxWidth: .infinity)
+            .frame(minHeight: 44)
             .padding(.vertical, AppTheme.Spacing.md)
             .background(AppTheme.Colors.secondaryBackground)
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.card))
@@ -32,7 +36,9 @@ struct CompactSelectionCard: View {
             )
         }
         .buttonStyle(.plain)
-        .animation(AppTheme.Animation.quick, value: isSelected)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+        .animation(AppTheme.Animation.quick(reduceMotion: reduceMotion), value: isSelected)
     }
 }
 

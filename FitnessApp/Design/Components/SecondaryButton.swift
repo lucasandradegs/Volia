@@ -5,6 +5,8 @@ struct SecondaryButton: View {
     let isLoading: Bool
     let action: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     init(_ title: String, isLoading: Bool = false, action: @escaping () -> Void) {
         self.title = title
         self.isLoading = isLoading
@@ -34,12 +36,14 @@ struct SecondaryButton: View {
         }
         .disabled(isLoading)
         .opacity(isLoading ? 0.6 : 1.0)
+        .accessibilityLabel(title)
+        .animation(AppTheme.Animation.quick(reduceMotion: reduceMotion), value: isLoading)
     }
 }
 
 #Preview {
     VStack(spacing: AppTheme.Spacing.lg) {
-        SecondaryButton("Create manually") {}
+        SecondaryButton("Criar manualmente") {}
     }
     .padding(AppTheme.Spacing.lg)
     .background(AppTheme.Colors.background)

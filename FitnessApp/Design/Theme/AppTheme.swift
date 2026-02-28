@@ -19,20 +19,21 @@ enum AppTheme {
         static let destructive = Color.red
     }
 
-    // MARK: Typography
+    // MARK: Typography (Dynamic Type)
 
     enum Typography {
-        // Bebas Neue — display
-        static let display = Font.custom("BebasNeue-Regular", size: 72)
-        static let displayMedium = Font.custom("BebasNeue-Regular", size: 48)
-        static let displaySmall = Font.custom("BebasNeue-Regular", size: 28)
+        // Bebas Neue — display (escala com Dynamic Type)
+        static let display = Font.custom("BebasNeue-Regular", size: 72, relativeTo: .largeTitle)
+        static let displayMedium = Font.custom("BebasNeue-Regular", size: 48, relativeTo: .largeTitle)
+        static let displaySmall = Font.custom("BebasNeue-Regular", size: 28, relativeTo: .title)
+        static let metric = Font.custom("BebasNeue-Regular", size: 28, relativeTo: .title)
 
-        // System — UI
-        static let overline = Font.system(size: 11, weight: .medium)
-        static let headline = Font.system(size: 14, weight: .semibold)
-        static let body = Font.system(size: 14, weight: .light)
-        static let caption = Font.system(size: 12, weight: .regular)
-        static let metric = Font.custom("BebasNeue-Regular", size: 28)
+        // System — UI (escala com Dynamic Type)
+        static let overline = Font.system(.caption2, weight: .medium)
+        static let headline = Font.system(.subheadline, weight: .semibold)
+        static let body = Font.system(.subheadline, weight: .light)
+        static let caption = Font.system(.caption, weight: .regular)
+        static let smallLabel = Font.system(.caption2, weight: .medium)
     }
 
     // MARK: Kerning
@@ -65,6 +66,19 @@ enum AppTheme {
     // MARK: Animation
 
     enum Animation {
+        static func standard(reduceMotion: Bool) -> SwiftUI.Animation? {
+            reduceMotion ? nil : .easeInOut(duration: 0.3)
+        }
+
+        static func spring(reduceMotion: Bool) -> SwiftUI.Animation? {
+            reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.8)
+        }
+
+        static func quick(reduceMotion: Bool) -> SwiftUI.Animation? {
+            reduceMotion ? nil : .easeOut(duration: 0.2)
+        }
+
+        // Versões estáticas para contextos sem acesso ao Environment
         static let standard = SwiftUI.Animation.easeInOut(duration: 0.3)
         static let spring = SwiftUI.Animation.spring(response: 0.4, dampingFraction: 0.8)
         static let quick = SwiftUI.Animation.easeOut(duration: 0.2)

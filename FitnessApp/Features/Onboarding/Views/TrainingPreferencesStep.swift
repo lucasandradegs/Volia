@@ -7,7 +7,7 @@ struct TrainingPreferencesStep: View {
         OnboardingStepWrapper(
             title: "SEU\nESPAÇO",
             subtitle: "Isso influencia quais exercícios vamos sugerir",
-            stepTag: "Passo 4 de 8"
+            stepTag: "Passo 5 de 9"
         ) {
             VStack(spacing: AppTheme.Spacing.sm) {
                 ForEach(EquipmentType.allCases) { equipment in

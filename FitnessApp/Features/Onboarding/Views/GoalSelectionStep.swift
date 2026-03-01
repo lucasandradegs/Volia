@@ -7,7 +7,7 @@ struct GoalSelectionStep: View {
         OnboardingStepWrapper(
             title: "SEU\nOBJETIVO",
             subtitle: "Escolha o que mais importa pra você agora",
-            stepTag: "Passo 1 de 8"
+            stepTag: "Passo 2 de 9"
         ) {
             VStack(spacing: AppTheme.Spacing.sm) {
                 ForEach(WorkoutGoal.allCases) { goal in

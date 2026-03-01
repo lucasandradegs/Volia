@@ -12,7 +12,7 @@ struct DislikedExercisesStep: View {
         OnboardingStepWrapper(
             title: "SEUS\nDISLIKES",
             subtitle: "A gente entende. Vamos adaptar seu plano.",
-            stepTag: "Passo 5 de 8"
+            stepTag: "Passo 6 de 9"
         ) {
             VStack(spacing: AppTheme.Spacing.lg) {
                 LazyVGrid(columns: columns, spacing: AppTheme.Spacing.sm) {

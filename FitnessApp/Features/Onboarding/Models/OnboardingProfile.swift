@@ -3,6 +3,7 @@ import Foundation
 // MARK: - Onboarding Profile
 
 struct OnboardingProfile: Codable {
+    var gender: Gender?
     var goal: WorkoutGoal?
     var experienceLevel: ExperienceLevel?
     var age: Int = 25
@@ -17,6 +18,30 @@ struct OnboardingProfile: Codable {
 }
 
 // MARK: - Enums
+
+enum Gender: String, Codable, CaseIterable, Identifiable {
+    case male = "Masculino"
+    case female = "Feminino"
+    case other = "Outros"
+
+    var id: String { rawValue }
+
+    var subtitle: String {
+        switch self {
+        case .male: return "Cálculos baseados no perfil biológico masculino"
+        case .female: return "Cálculos baseados no perfil biológico feminino"
+        case .other: return "Usaremos valores médios para personalizar seu plano"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .male: return "figure.stand"
+        case .female: return "figure.stand.dress"
+        case .other: return "person.fill.questionmark"
+        }
+    }
+}
 
 enum WorkoutGoal: String, Codable, CaseIterable, Identifiable {
     case hypertrophy = "Ganhar massa muscular"

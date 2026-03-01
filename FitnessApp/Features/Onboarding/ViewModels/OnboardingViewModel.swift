@@ -10,7 +10,7 @@ final class OnboardingViewModel: ObservableObject {
     @Published var profile = OnboardingProfile()
     @Published var bodyDataShowsContinue: Bool = false
 
-    let totalSteps = 9
+    let totalSteps = 10
 
     // MARK: - Navigation
 
@@ -31,7 +31,7 @@ final class OnboardingViewModel: ObservableObject {
     }
 
     var shouldHideBottomButton: Bool {
-        currentStep == 3 && !bodyDataShowsContinue
+        currentStep == 4 && !bodyDataShowsContinue
     }
 
     var canAdvance: Bool {
@@ -43,20 +43,22 @@ final class OnboardingViewModel: ObservableObject {
         case 0:
             return true
         case 1:
-            return profile.goal != nil
+            return profile.gender != nil
         case 2:
-            return profile.experienceLevel != nil
+            return profile.goal != nil
         case 3:
-            return true // Body data tem valores padrão
+            return profile.experienceLevel != nil
         case 4:
-            return profile.equipmentAvailable != nil
+            return true // Body data tem valores padrão
         case 5:
-            return true // Disliked muscles é opcional
+            return profile.equipmentAvailable != nil
         case 6:
-            return true // Sensitive areas é opcional
+            return true // Disliked muscles é opcional
         case 7:
-            return true // Availability tem valores padrão
+            return true // Sensitive areas é opcional
         case 8:
+            return true // Availability tem valores padrão
+        case 9:
             return profile.workoutSetupChoice != nil
         default:
             return false

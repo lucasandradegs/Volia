@@ -32,7 +32,7 @@ struct BodyDataStep: View {
         OnboardingStepWrapper(
             title: "SOBRE\nVOCÊ",
             subtitle: "Usamos esses dados para personalizar intensidade e recuperação.",
-            stepTag: "Passo 3 de 8"
+            stepTag: "Passo 4 de 9"
         ) {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
 

@@ -40,7 +40,7 @@ struct AvailabilityStep: View {
         OnboardingStepWrapper(
             title: "SUA\nROTINA",
             subtitle: "Vamos montar seu plano em torno da sua vida real — não o contrário.",
-            stepTag: "Passo 7 de 8"
+            stepTag: "Passo 8 de 9"
         ) {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
 

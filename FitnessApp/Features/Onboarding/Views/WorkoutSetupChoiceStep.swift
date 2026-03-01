@@ -16,7 +16,7 @@ struct WorkoutSetupChoiceStep: View {
         OnboardingStepWrapper(
             title: "SEU\nPLANO",
             subtitle: "Você pode mudar isso depois, sem stress.",
-            stepTag: "Passo 8 de 8"
+            stepTag: "Passo 9 de 9"
         ) {
             VStack(spacing: AppTheme.Spacing.sm) {
                 // Card IA com badge
